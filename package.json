@@ -1,0 +1,39 @@
+{
+  "name": "inkwave-api",
+  "version": "1.0.0",
+  "description": "Inkwave is a cloud solution to carry out administration and accounting of small businesses",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./server.js localhost",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Inkwaveapp/inkwave-api"
+  },
+  "keywords": [
+    "node js",
+    "sql server",
+    "mssql",
+    "crud",
+    "express",
+    "rest api"
+  ],
+  "author": "Inkwave",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Inkwaveapp/inkwave-api"
+  },
+  "homepage": "https://github.com/Inkwaveapp/inkwave-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^2.23.0",
+    "express": "^4.18.2",
+    "mssql": "^9.0.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "eslint": "^8.31.0",
+    "nodemon": "^2.0.4"
+  }
+}
