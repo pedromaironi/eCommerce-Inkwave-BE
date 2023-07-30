@@ -2,10 +2,10 @@ const env = process.env.NODE_ENV;
 const sql = require("mssql");
 
 const config = {
-  user: "pedro",
-  password: "Juandejesus2930",
-  server: "inkwave",
-  database: "ecommerce",
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  server: process.env.HOST,
+  database: process.env.DATABASE,
   trustServerCertificate: true,
 };
 
