@@ -3,26 +3,16 @@ const sql = require("mssql");
 const { config } = require("../config/dbconfig");
 
 //* Models
-const Products = require("../models/prenda/prenda.model");
+const Products = require("../models/Products/products.model");
 
 //* Get all Products
 const getProducts = async () => {
   try {
     const pool = await sql.connect(config);
-    const result = await pool.request().execute("getProducts");
+    const result = await pool.request().execute("GetProductDetails");
 
-    const prendas = result.recordset.map((prendaData) => {
-      return new Prenda(
-        prendaData.id,
-        prendaData.nombre,
-        prendaData.descripcion,
-        prendaData.precio,
-        prendaData.imagen,
-        prendaData.id_categoria
-      );
-    });
-
-    return prendas;
+    const products = result.recordsets[0];
+    return products;
   } catch (error) {
     throw error;
   }
