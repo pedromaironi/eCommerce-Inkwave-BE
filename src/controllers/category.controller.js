@@ -17,21 +17,41 @@ const getCategories = async () => {
 };
 
 const getProductsByCategory = async (category_id) => {
-    try {
-      const pool = await sql.connect(config);
-      const result = await pool
-        .request()
-        .input("category_id", sql.Int, category_id)
-        .execute("GetProductsByCategory");
-  
-      const products = result.recordsets[0];
-      return products;
-    } catch (error) {
-      throw error;
-    }
-  };
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("category_id", sql.Int, category_id)
+      .execute("GetProductsByCategory");
+
+    const products = result.recordsets[0];
+    return products;
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching products." });
+  }
+};
+
+const getProductsByCategoryName = async (categoryName) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("categoryName", sql.NVarChar(100), categoryName)
+      .execute("GetProductsByCategoryName");
+
+    const products = result.recordsets[0];
+    return products;
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching products." });
+  }
+};
 
 module.exports = {
-    getCategories,
-    getProductsByCategory
-}
+  getCategories,
+  getProductsByCategory,
+  getProductsByCategoryName,
+};

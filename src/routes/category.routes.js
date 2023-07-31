@@ -4,10 +4,10 @@ const categoryController = require("../controllers/category.controller");
 
 // Retrieve all categories
 router.route("/").get((req, res) => {
-    categoryController.getCategories().then((data) => {
-      res.send(data);
-    });
+  categoryController.getCategories().then((data) => {
+    res.send(data);
   });
+});
 
 // Retrieve all products by category
 router.route("/:categoryId").get((req, res) => {
@@ -20,5 +20,24 @@ router.route("/:categoryId").get((req, res) => {
     }
   });
 });
-  
+
+// Retrieve all products by category name
+router.route("/categoryName/:name").get((req, res) => {
+  const categoryName = req.params.name;
+  categoryController
+    .getProductsByCategoryName(categoryName)
+    .then((data) => {
+      if (data.length > 0) {
+        res.json(data);
+      } else {
+        res.send("Category not found");
+      }
+    })
+    .catch((error) => {
+      res
+        .status(500)
+        .json({ error: "An error occurred while fetching products." });
+    });
+});
+
 module.exports = router;
