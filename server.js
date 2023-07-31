@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 //Routes
 app.use("/api/v1/", router);
 app.use("/api/v1/products", require("./src/routes/products.routes"));
+app.use("/api/v1/category", require("./src/routes/category.routes"));
 
 //Middleware
 app.use((req, response, next) => {

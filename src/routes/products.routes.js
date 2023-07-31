@@ -25,7 +25,11 @@ router.route("/:id").get((req, res) => {
 router.route("/category/:categoryId").get((req, res) => {
   const categoryId = parseInt(req.params.categoryId);
   productsController.getProductsByCategory(categoryId).then((data) => {
-    res.send(data);
+    if (data) {
+      res.send(data);
+    } else {
+      res.send("Category not found");
+    }
   });
 });
 
