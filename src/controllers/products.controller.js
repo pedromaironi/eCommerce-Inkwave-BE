@@ -18,62 +18,40 @@ const getProducts = async () => {
   }
 };
 
-//* Find Prendas by ID
-const findPrendaById = async (id) => {
+//* Find Products by ID
+const getProductById = async (product_id) => {
   try {
     const pool = await sql.connect(config);
     const result = await pool
       .request()
-      .input("id", sql.Int, id)
-      .execute("findPrendaById");
+      .input("product_id", sql.Int, product_id)
+      .execute("GetProductById");
 
-    if (result.recordset.length > 0) {
-      const prendaData = result.recordset[0];
-      const prenda = new Prenda(
-        prendaData.id,
-        prendaData.nombre,
-        prendaData.descripcion,
-        prendaData.precio,
-        prendaData.imagen,
-        prendaData.id_categoria
-      );
-      return prenda;
-    }
-
-    return null; // Prenda not found with the given ID
+    const product = result.recordsets[0][0];
+    return product;
   } catch (error) {
     throw error;
   }
 };
 
-//* Find Prendas by category
-const findPrendasByCategory = async (categoryId) => {
+//* Find Products by category
+const getProductsByCategory = async (category_id) => {
   try {
     const pool = await sql.connect(config);
     const result = await pool
       .request()
-      .input("categoryId", sql.Int, categoryId)
-      .execute("findPrendasByCategory");
+      .input("category_id", sql.Int, category_id)
+      .execute("GetProductsByCategory");
 
-    const prendas = result.recordset.map((prendaData) => {
-      return new Prenda(
-        prendaData.id,
-        prendaData.nombre,
-        prendaData.descripcion,
-        prendaData.precio,
-        prendaData.imagen,
-        prendaData.id_categoria
-      );
-    });
-
-    return prendas;
+    const products = result.recordsets[0];
+    return products;
   } catch (error) {
     throw error;
   }
 };
 
 module.exports = {
-  findPrendaById,
-  findPrendasByCategory,
+  getProductsByCategory,
+  getProductById,
   getProducts,
 };
