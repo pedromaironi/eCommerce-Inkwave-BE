@@ -3,26 +3,25 @@ const sql = require("mssql");
 const { config } = require("../config/dbconfig");
 
 // Register a new client
-const registerClient = async (req, res) => {
+const registerClient = async (name, email, password, date) => {
   try {
-    const { name, email, password } = req.body;
     const pool = await sql.connect(config);
     const result = await pool
       .request()
-      .input("name", sql.NVarChar(100), name)
-      .input("email", sql.NVarChar(100), email)
-      .input("password", sql.NVarChar(100), password)
+      .input("nombre", sql.NVarChar(100), name)
+      .input("correo_electronico", sql.NVarChar(100), email)
+      .input("Password", sql.NVarChar(100), password)
+      .input("fecha_registro", sql.Date, new Date(date))
       .execute("RegisterClient");
 
     if (result.rowsAffected[0] > 0) {
-      res.status(201).json({ message: "Client registered successfully." });
+      return true; // Client registered successfully
     } else {
-      res.status(500).json({ error: "Unable to register client." });
+      return false; // Unable to register client
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while registering the client." });
+    console.error("An error occurred while registering the client:", error);
+    throw error;
   }
 };
 

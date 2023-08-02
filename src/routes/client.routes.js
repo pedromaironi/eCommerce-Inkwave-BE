@@ -28,20 +28,21 @@ router.post("/login", (req, res) => {
 
 // Client Registration
 router.post("/register", (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, date } = req.body;
   clientController
-    .registerClient(name, email, password)
-    .then((client) => {
-      if (client) {
-        // Successful registration, return client data or token
-        res.json(client);
+    .registerClient(name, email, password, date)
+    .then((success) => {
+      if (success) {
+        // Successful registration
+        res.status(201).json({ message: "Client registered successfully." });
       } else {
-        // Registration failed
+        // Unable to register client
         res.status(500).json({ error: "Failed to register client" });
       }
     })
     .catch((error) => {
       // Handle other errors
+      console.error("An error occurred while registering the client:", error);
       res.status(500).json({ error: "An error occurred while registering" });
     });
 });
