@@ -30,7 +30,7 @@ router.route("/categoryName/:name").get((req, res) => {
       if (data.length > 0) {
         res.json(data);
       } else {
-        res.send("Category not found");
+        res.send([]);
       }
     })
     .catch((error) => {
