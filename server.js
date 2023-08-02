@@ -47,6 +47,7 @@ app.use("/api/v1/", router);
 app.use("/api/v1/products", require("./src/routes/products.routes"));
 app.use("/api/v1/category", require("./src/routes/category.routes"));
 app.use("/api/v1/auth", require("./src/routes/client.routes"));
+app.use("/api/v1/order", require("./src/routes/order.routes"));
 
 //Middleware
 app.use((req, response, next) => {
