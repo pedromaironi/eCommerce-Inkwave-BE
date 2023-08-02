@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/Inkwaveapp/inkwave-api#readme",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "date-fns": "^2.23.0",
     "express": "^4.18.2",

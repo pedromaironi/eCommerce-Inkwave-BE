@@ -1,14 +1,14 @@
 // routes/authRoutes.js
 const express = require("express");
 const router = express.Router();
-const pool = require("../db");
 
 // Client controller
 const clientController = require("../controllers/client.controller");
 
 // Client Login
 router.post("/login", (req, res) => {
-  const { email, password } = req.body;
+  const email = req.body.email;
+  const password = req.body.password;
   clientController
     .loginClient(email, password)
     .then((client) => {

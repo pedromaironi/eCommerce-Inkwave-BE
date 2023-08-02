@@ -27,23 +27,23 @@ const registerClient = async (req, res) => {
 };
 
 // Login a client
-const loginClient = async (req, res) => {
+const loginClient = async (email, password) => {
   try {
-    const { email, password } = req.body;
     const pool = await sql.connect(config);
     const result = await pool
       .request()
-      .input("email", sql.NVarChar(100), email)
+      .input("correo_electronico", sql.NVarChar(100), email)
       .input("password", sql.NVarChar(100), password)
       .execute("LoginClient");
 
     if (result.recordsets[0].length > 0) {
       const client = result.recordsets[0][0];
-      res.status(200).json({ message: "Login successful.", client });
+      return client;
     } else {
       res.status(401).json({ error: "Invalid credentials." });
     }
   } catch (error) {
+    console.error("An error occurred while logging in the client:", error);
     res
       .status(500)
       .json({ error: "An error occurred while logging in the client." });

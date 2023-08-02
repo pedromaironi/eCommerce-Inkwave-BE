@@ -23,6 +23,25 @@ app.use(express.json());
 //false
 app.use(express.urlencoded({ extended: true }));
 
+// Parse JSON and url-encoded request bodies
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Custom request logging middleware
+const requestLogger = (req, res, next) => {
+  console.log("-------------------------------");
+  console.log("New Request:");
+  console.log("Method:", req.method);
+  console.log("URL:", req.originalUrl);
+  console.log("Headers:", req.headers);
+  console.log("Query Parameters:", req.query);
+  console.log("Request Body:", req.body);
+  console.log("-------------------------------");
+  next();
+};
+
+app.use(requestLogger);
+
 //Routes
 app.use("/api/v1/", router);
 app.use("/api/v1/products", require("./src/routes/products.routes"));
@@ -37,12 +56,12 @@ app.use((req, response, next) => {
 
 // simple route
 app.get("/", (req, res) => {
+  console.log(req.body);
   res.json({ message: "Welcome to inkwave api." });
 });
 
 app.use(errorHandler);
 
-// set port, listen for requests
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
