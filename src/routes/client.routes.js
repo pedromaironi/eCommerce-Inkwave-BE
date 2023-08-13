@@ -47,4 +47,14 @@ router.post("/register", (req, res) => {
     });
 });
 
+router.get("/user/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const customerDetails = await clientController.getCustomerDetails(id);
+    res.status(200).json(customerDetails);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

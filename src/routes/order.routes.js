@@ -5,7 +5,25 @@ const orderController = require("../controllers/order.controller");
 // Ruta para crear una nueva orden con detalles
 router.post("/create", async (req, res) => {
   try {
-    const { orderData, orderDetails } = req.body;
+    const {
+      userID,
+      date,
+      total,
+      status,
+      subTotal,
+      taxPrice,
+      shippingPrice,
+      orderItems: orderDetails,
+    } = req.body;
+    const orderData = {
+      userID: userID,
+      date: date,
+      total: total,
+      status: status,
+      subTotal: subTotal,
+      taxes: taxPrice,
+      shippingPrice: shippingPrice,
+    };
     const orderId = await orderController.createOrder(orderData, orderDetails);
     res.json({ orderId });
   } catch (error) {

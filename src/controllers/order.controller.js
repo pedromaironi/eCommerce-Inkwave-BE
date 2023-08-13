@@ -14,10 +14,13 @@ const createOrder = async (orderData, orderDetails) => {
       // Insertar la orden en la tabla "Orden"
       const { recordset: insertedOrder } = await transaction
         .request()
-        .input("id_cliente", sql.Int, orderData.id_cliente)
-        .input("fecha", sql.Date, orderData.fecha)
+        .input("id_cliente", sql.Int, orderData.userID)
+        .input("fecha", sql.Date, orderData.date)
         .input("total", sql.Decimal(18, 2), orderData.total)
-        .input("estado", sql.NVarChar(100), orderData.estado)
+        .input("estado", sql.NVarChar(100), orderData.status)
+        .input("subtotal", sql.Decimal(18, 2), orderData.subTotal)
+        .input("taxes", sql.Decimal(18, 2), orderData.taxes)
+        .input("pago_envio", sql.Decimal(18, 2), orderData.shippingPrice)
         .execute("InsertOrder");
 
       // Insertar los detalles de la orden en la tabla "OrdenDetalle"
@@ -25,9 +28,9 @@ const createOrder = async (orderData, orderDetails) => {
         await transaction
           .request()
           .input("id_orden", sql.Int, insertedOrder[0].id_orden)
-          .input("id_producto", sql.Int, detail.id_producto)
-          .input("cantidad", sql.Int, detail.cantidad)
-          .input("precio_unitario", sql.Decimal(18, 2), detail.precio_unitario)
+          .input("id_producto", sql.Int, detail.product)
+          .input("cantidad", sql.Int, detail.qty)
+          .input("precio_unitario", sql.Decimal(18, 2), detail.price)
           .execute("InsertOrderDetail");
       }
 
@@ -53,7 +56,7 @@ const getOrdersByClient = async (clientId) => {
     const result = await pool
       .request()
       .input("id_cliente", sql.Int, clientId)
-      .execute("GetOrdersByClient");
+      .execute("GetOrdersWithDetailsByClientId");
 
     return result.recordsets[0];
   } catch (error) {
