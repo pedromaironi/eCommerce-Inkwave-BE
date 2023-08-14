@@ -50,8 +50,115 @@ const getProductsByCategory = async (category_id) => {
   }
 };
 
+const addFavorite = async (userId, productId) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("id_cliente", sql.Int, userId)
+      .input("id_producto", sql.Int, productId)
+      .execute("AddFavProduct");
+
+    if (result.rowsAffected[0] > 0) {
+      return true; // Favorito agregado exitosamente
+    } else {
+      return false; // No se pudo agregar el favorito
+    }
+  } catch (error) {
+    console.error("An error occurred while adding favorite:", error);
+    throw error;
+  }
+};
+
+const removeFavorite = async (userId, productId) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("id_cliente", sql.Int, userId)
+      .input("id_producto", sql.Int, productId)
+      .execute("DeleteFavProduct");
+
+    if (result.rowsAffected[0] > 0) {
+      return true; // Favorito agregado exitosamente
+    } else {
+      return false; // No se pudo agregar el favorito
+    }
+  } catch (error) {
+    console.error("An error occurred while adding favorite:", error);
+    throw error;
+  }
+};
+
+const addClickProduct = async (userId, productId) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("id_cliente", sql.Int, userId)
+      .input("id_producto", sql.Int, productId)
+      .execute("AddClickProduct");
+
+    if (result.rowsAffected[0] > 0) {
+      return true; // Click registrado exitosamente
+    } else {
+      return false; // No se pudo registrar el click
+    }
+  } catch (error) {
+    console.error("An error occurred while adding click:", error);
+    throw error;
+  }
+};
+
+const addCalification = async (userId, productId, rating) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("id_cliente", sql.Int, userId)
+      .input("id_producto", sql.Int, productId)
+      .input("calificacion", sql.Int, rating)
+      .execute("AddCalification");
+
+    if (result.rowsAffected[0] > 0) {
+      return true; // Calificación agregada exitosamente
+    } else {
+      return false; // No se pudo agregar la calificación
+    }
+  } catch (error) {
+    console.error("An error occurred while adding calification:", error);
+    throw error;
+  }
+};
+
+const updateCalification = async (userId, productId, rating) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("id_cliente", sql.Int, userId)
+      .input("id_producto", sql.Int, productId)
+      .input("nueva_calificacion", sql.Int, rating)
+      .execute("UpdateCalification");
+
+    if (result.rowsAffected[0] > 0) {
+      return true; // Calificación actualizada exitosamente
+    } else {
+      return false; // No se pudo actualizar la calificación
+    }
+  } catch (error) {
+    console.error("An error occurred while updating calification:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   getProductsByCategory,
   getProductById,
   getProducts,
+  addFavorite,
+  removeFavorite,
+  addClickProduct,
+  updateCalification,
+  addCalification,
 };

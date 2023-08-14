@@ -33,4 +33,105 @@ router.route("/category/:categoryId").get((req, res) => {
   });
 });
 
+// Agregar producto a favoritos
+router.route("/favorite/:userId/:productId").post(async (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const productId = parseInt(req.params.productId);
+  try {
+    const added = await productsController.addFavorite(userId, productId);
+    if (added) {
+      res.json({ message: "Producto agregado a favoritos exitosamente." });
+    } else {
+      res
+        .status(500)
+        .json({ error: "No se pudo agregar el producto a favoritos." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al agregar producto a favoritos." });
+  }
+});
+
+// Eliminar producto de favoritos
+router.route("/favorite/:userId/:productId").delete(async (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const productId = parseInt(req.params.productId);
+  try {
+    const removed = await productsController.removeFavorite(userId, productId);
+    if (removed) {
+      res.json({ message: "Producto eliminado de favoritos exitosamente." });
+    } else {
+      res
+        .status(500)
+        .json({ error: "No se pudo eliminar el producto de favoritos." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al eliminar producto de favoritos." });
+  }
+});
+
+// Registrar click en producto
+router.route("/click/:userId/:productId").post(async (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const productId = parseInt(req.params.productId);
+  try {
+    const clicked = await productsController.addClickProduct(userId, productId);
+    if (clicked) {
+      res.json({ message: "Click registrado exitosamente." });
+    } else {
+      res.status(500).json({ error: "No se pudo registrar el click." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al registrar click." });
+  }
+});
+
+// Agregar calificación a producto
+router
+  .route("/calification/:userId/:productId/:rating")
+  .post(async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const productId = parseInt(req.params.productId);
+    const rating = parseInt(req.params.rating);
+
+    try {
+      const added = await productsController.addCalification(
+        userId,
+        productId,
+        rating
+      );
+      if (added) {
+        res.json({ message: "Calificación agregada exitosamente." });
+      } else {
+        res.status(500).json({ error: "No se pudo agregar la calificación." });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "Error al agregar calificación." });
+    }
+  });
+
+// Actualizar calificación de producto
+router
+  .route("/calification/update/:userId/:productId/:newRating")
+  .put(async (req, res) => {
+    const userId = parseInt(req.params.userId);
+    const productId = parseInt(req.params.productId);
+    const newRating = parseInt(req.params.newRating);
+
+    try {
+      const updated = await productsController.updateCalification(
+        userId,
+        productId,
+        newRating
+      );
+      if (updated) {
+        res.json({ message: "Calificación actualizada exitosamente." });
+      } else {
+        res
+          .status(500)
+          .json({ error: "No se pudo actualizar la calificación." });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "Error al actualizar calificación." });
+    }
+  });
 module.exports = router;
