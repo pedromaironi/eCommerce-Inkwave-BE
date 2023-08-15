@@ -9,6 +9,15 @@ router.route("/").get((req, res) => {
   });
 });
 
+// Retrieve all products by cliente
+router.route("/client/:clientID").get((req, res) => {
+  productsController
+    .getProductsByClient(parseInt(req.params.clientID))
+    .then((data) => {
+      res.send(data);
+    });
+});
+
 // Retrieve a specific product by ID
 router.route("/:id").get((req, res) => {
   const productId = parseInt(req.params.id); // Convert the ID to an integer
@@ -86,28 +95,26 @@ router.route("/click/:userId/:productId").post(async (req, res) => {
 });
 
 // Agregar calificación a producto
-router
-  .route("/calification/:userId/:productId/:rating")
-  .post(async (req, res) => {
-    const userId = parseInt(req.params.userId);
-    const productId = parseInt(req.params.productId);
-    const rating = parseInt(req.params.rating);
+router.route("/rating/:userId/:productId/:rating").post(async (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const productId = parseInt(req.params.productId);
+  const rating = parseFloat(req.params.rating);
 
-    try {
-      const added = await productsController.addCalification(
-        userId,
-        productId,
-        rating
-      );
-      if (added) {
-        res.json({ message: "Calificación agregada exitosamente." });
-      } else {
-        res.status(500).json({ error: "No se pudo agregar la calificación." });
-      }
-    } catch (error) {
-      res.status(500).json({ error: "Error al agregar calificación." });
+  try {
+    const added = await productsController.addCalification(
+      userId,
+      productId,
+      rating
+    );
+    if (added) {
+      res.json({ message: "Calificación agregada exitosamente." });
+    } else {
+      res.status(500).json({ error: "No se pudo agregar la calificación." });
     }
-  });
+  } catch (error) {
+    res.status(500).json({ error: "Error al agregar calificación." });
+  }
+});
 
 // Actualizar calificación de producto
 router

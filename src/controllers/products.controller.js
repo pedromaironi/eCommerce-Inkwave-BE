@@ -18,6 +18,23 @@ const getProducts = async () => {
   }
 };
 
+//* Get all Products By Client
+const getProductsByClient = async (id) => {
+  try {
+    const pool = await sql.connect(config);
+
+    const result = await pool
+      .request()
+      .input("id_cliente", sql.Int, id)
+      .execute("GetProductDetailsByClient");
+
+    const products = result.recordsets[0];
+    return products;
+  } catch (error) {
+    throw error;
+  }
+};
+
 //* Find Products by ID
 const getProductById = async (product_id) => {
   try {
@@ -117,7 +134,7 @@ const addCalification = async (userId, productId, rating) => {
       .request()
       .input("id_cliente", sql.Int, userId)
       .input("id_producto", sql.Int, productId)
-      .input("calificacion", sql.Int, rating)
+      .input("calificacion", sql.Float, rating)
       .execute("AddCalification");
 
     if (result.rowsAffected[0] > 0) {
@@ -161,4 +178,5 @@ module.exports = {
   addClickProduct,
   updateCalification,
   addCalification,
+  getProductsByClient,
 };
