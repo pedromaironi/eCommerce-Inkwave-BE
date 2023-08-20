@@ -51,6 +51,23 @@ const getProductById = async (product_id) => {
   }
 };
 
+//* Find Products by ID and Client ID
+const getProductByIdClient = async (product_id, client_id) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("product_id", sql.Int, product_id)
+      .input("id_cliente", sql.Int, client_id)
+      .execute("GetProductByIdAndClientId");
+
+    const product = result.recordsets[0][0];
+    return product;
+  } catch (error) {
+    throw error;
+  }
+};
+
 //* Find Products by category
 const getProductsByCategory = async (category_id) => {
   try {
@@ -169,6 +186,26 @@ const updateCalification = async (userId, productId, rating) => {
   }
 };
 
+const updateCalification = async (search, userId) => {
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .input("id_cliente", sql.Int, userId)
+      .input("hbusqueda", sql.VarChar, search)
+      .execute("SearchProducts");
+
+    if (result.rowsAffected[0] > 0) {
+      return true; // Calificación actualizada exitosamente
+    } else {
+      return false; // No se pudo actualizar la calificación
+    }
+  } catch (error) {
+    console.error("An error occurred while updating calification:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   getProductsByCategory,
   getProductById,
@@ -179,4 +216,5 @@ module.exports = {
   updateCalification,
   addCalification,
   getProductsByClient,
+  getProductByIdClient,
 };

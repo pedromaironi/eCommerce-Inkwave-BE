@@ -30,6 +30,19 @@ router.route("/:id").get((req, res) => {
   });
 });
 
+// Retrieve a specific product by ID and client ID
+router.route("/:id/:clientId").get((req, res) => {
+  const productId = parseInt(req.params.id); // Convert the ID to an integer
+  const clientId = parseInt(req.params.clientId); // Convert the ID to an integer
+  productsController.getProductByIdClient(productId, clientId).then((data) => {
+    if (data) {
+      res.send(data);
+    } else {
+      res.status(404).send("Product not found");
+    }
+  });
+});
+
 // Retrieve all products by category
 router.route("/category/:categoryId").get((req, res) => {
   const categoryId = parseInt(req.params.categoryId);
