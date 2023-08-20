@@ -186,19 +186,21 @@ const updateCalification = async (userId, productId, rating) => {
   }
 };
 
-const updateCalification = async (search, userId) => {
+const searchProduct = async (search, userId) => {
   try {
     const pool = await sql.connect(config);
-    const result = await pool
-      .request()
-      .input("id_cliente", sql.Int, userId)
-      .input("hbusqueda", sql.VarChar, search)
-      .execute("SearchProducts");
+    const request = pool.request();
+    request.input("id_cliente", sql.Int, userId);
+    request.input("busqueda", sql.VarChar, search);
 
-    if (result.rowsAffected[0] > 0) {
-      return true; // Calificación actualizada exitosamente
+    const result = await request.execute("SearchProducts");
+
+    const products = result.recordsets[0]; // Obtener el conjunto de registros resultante
+
+    if (products.length > 0) {
+      return products; // Devolver el resultado de la búsqueda
     } else {
-      return false; // No se pudo actualizar la calificación
+      return null; // No se encontraron productos
     }
   } catch (error) {
     console.error("An error occurred while updating calification:", error);
@@ -217,4 +219,5 @@ module.exports = {
   addCalification,
   getProductsByClient,
   getProductByIdClient,
+  searchProduct,
 };

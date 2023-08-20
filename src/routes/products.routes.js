@@ -154,4 +154,22 @@ router
       res.status(500).json({ error: "Error al actualizar calificación." });
     }
   });
+
+router.route("/search/:userId/:searchTerm").get(async (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const searchTerm = req.params.searchTerm;
+
+  try {
+    const products = await productsController.searchProduct(userId, searchTerm);
+
+    if (products !== null) {
+      res.json(products);
+    } else {
+      res.json({ message: "No se encontraron productos." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al buscar productos." });
+  }
+});
+
 module.exports = router;
