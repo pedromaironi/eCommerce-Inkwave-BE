@@ -160,7 +160,7 @@ router.route("/search/:userId/:searchTerm").get(async (req, res) => {
   const searchTerm = req.params.searchTerm;
 
   try {
-    const products = await productsController.searchProduct(userId, searchTerm);
+    const products = await productsController.searchProduct(searchTerm, userId);
 
     if (products !== null) {
       res.json(products);

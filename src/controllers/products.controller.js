@@ -191,7 +191,7 @@ const searchProduct = async (search, userId) => {
     const pool = await sql.connect(config);
     const request = pool.request();
     request.input("id_cliente", sql.Int, userId);
-    request.input("busqueda", sql.VarChar, search);
+    request.input("searchTerm", sql.VarChar, search);
 
     const result = await request.execute("SearchProducts");
 
